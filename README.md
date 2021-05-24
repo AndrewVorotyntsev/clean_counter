@@ -1,16 +1,16 @@
 # clean_counter
 
-A new Flutter application.
+Приложение "Счетчик" написанное на Flutter, руководствуясь принципами чистой архитектуры.
 
-## Getting Started
+## UML-диаграмма классов приложения
 
-This project is a starting point for a Flutter application.
+![UML](clean_counter.png)
 
-A few resources to get you started if this is your first Flutter project:
+Класс **App** возвращает страницу **CounterPage**. Она с помощью соответствующих виджетов (BlocProvider, BlocBuilder) связана с компонентом бизнес-логики (BLoC), который реализован пакетом **flutter_bloc**. CounterPage передает события IncrementEvent, DecrementEvent, ResetEvent при нажатии на соответсвующие кнопки пользователем.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+В классе **CounterLogic** содержится вся высокоуровневая логика приложения. Она не связана с фреймворком, слоем данных и внешними зависимостями. Здесь определяются три метода, изменяющие целое значение некоторым образом: увеличение, уменьшение, приравневание к нулю.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Компонент бизнес логики **CounterBloc** наследуется от **CounterLogic**. В своем методе **mapEventToState** он в зависимости от произошедшего события, вызывает соответсвующий метод класса **CounterLogic**.
+Одним из атрибутов класса **CounterBloc** является экземпляр класса **DataInf**. Это абстрактный класс (интерфейс) **DataInf** объявляющий два метода: getData и setData.
+Его реализует класс **SharedPrefsAccess**, который предоставляет способ хранения данных в Shared Preference. 
+В зависимости от некоторых обстоятельств, например, от платформы, может потребоваться использовать другие реализации этого интефрейса. Для этого будет применяться условное выражение. 
